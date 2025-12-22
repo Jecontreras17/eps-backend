@@ -1,0 +1,26 @@
+# Entornos virtuales
+venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Migraciones compiladas
+*.sqlite3
+instance/
+
+# Logs
+*.log
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Base de datos SQLite
+instance/
+*.pyc
