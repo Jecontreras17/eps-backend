@@ -1,7 +1,14 @@
 from flask import Blueprint, request, jsonify
 from app.models.user import User
+from app.utils.extensions import db
 from werkzeug.security import check_password_hash
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
+    get_jwt_identity
+)
+from datetime import datetime
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -27,18 +34,21 @@ def login():
 
     access = create_access_token(
         identity=user.id,
-        additional_claims={
-            "roles": roles
-        }
+        additional_claims={"roles": roles}
     )
 
     refresh = create_refresh_token(identity=user.id)
+
+    #  iniciar contador de inactividad
+    user.last_activity = datetime.utcnow()
+    db.session.commit()
 
     return jsonify({
         "access_token": access,
         "refresh_token": refresh,
         "roles": roles
     })
+
 
 @auth_bp.route("/refresh", methods=["POST"])
 @jwt_required(refresh=True)
@@ -53,4 +63,4 @@ def refresh():
         additional_claims={"roles": roles}
     )
 
-    return {"access_token": new_access}
+    return jsonify({"access_token": new_access})

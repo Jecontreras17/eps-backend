@@ -9,6 +9,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_activity = db.Column(db.DateTime)
 
     roles = db.relationship(
         "Role",

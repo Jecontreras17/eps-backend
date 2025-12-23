@@ -1,16 +1,17 @@
 from functools import wraps
+from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from flask import jsonify
-from flask_jwt_extended import jwt_required, get_jwt
 
-def has_role(required_role):
+def role_required(*allowed_roles):
     def decorator(fn):
         @wraps(fn)
-        @jwt_required()
         def wrapper(*args, **kwargs):
-            claims = get_jwt()
-            roles = claims.get("roles", [])
+            verify_jwt_in_request()
 
-            if required_role not in roles:
+            claims = get_jwt()
+            user_roles = claims.get("roles", [])
+
+            if not any(role in user_roles for role in allowed_roles):
                 return jsonify({
                     "msg": "No tienes permisos para acceder a este recurso"
                 }), 403
@@ -18,4 +19,3 @@ def has_role(required_role):
             return fn(*args, **kwargs)
         return wrapper
     return decorator
-
