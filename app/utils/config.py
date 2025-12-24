@@ -19,4 +19,10 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
-    inactivity_limit_minutes = 30
+    INACTIVITY_LIMIT_MINUTES = 30
+
+    SESSION_COOKIE_SECURE = False # En localhost no usamos HTTPS
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = "Lax"
+
+    

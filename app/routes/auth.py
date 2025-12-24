@@ -9,10 +9,13 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 from datetime import datetime
+from app.utils.extensions import limiter
+from app.utils.validators import is_strong_password
 
 auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["POST"])
+@limiter.limit("10 per minute")
 def login():
     data = request.get_json()
 
@@ -64,3 +67,14 @@ def refresh():
     )
 
     return jsonify({"access_token": new_access})
+
+
+@auth_bp.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    password = data.get("password")
+    
+    #  Validar contraseña fuerte
+    is_valid, message = is_strong_password(password)
+    if not is_valid:
+        return jsonify({"msg": message}), 400

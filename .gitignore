@@ -1,10 +1,18 @@
 # Entornos virtuales
 venv/
 .env
+env/
+ENV/
 
 # Python
 __pycache__/
 *.py[cod]
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
 
 # Migraciones compiladas
 *.sqlite3
@@ -24,3 +32,20 @@ Thumbs.db
 # Base de datos SQLite
 instance/
 *.pyc
+
+
+.env
+.env.*
+
+# Base de datos
+*.db
+*.db-journal
+instance/
+
+
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
